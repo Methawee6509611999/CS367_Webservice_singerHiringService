@@ -1,0 +1,16 @@
+### 
+
+GET http://localhost:8080/singers
+
+
+###
+POST http://localhost:8080/books
+Content-Type: application/json
+
+{
+    "bookDetail": "One Hundred Years of Solitude",
+    "ownerName": "Gabriel García Márquez",
+    "locationName": "office drawer",
+    "borrowed": false,
+    "borrowedName": null
+}
