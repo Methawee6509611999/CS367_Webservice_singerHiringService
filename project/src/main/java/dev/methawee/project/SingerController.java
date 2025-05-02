@@ -84,16 +84,17 @@ public class SingerController {
         return scheduleRepository.save(schedule);
     }
 
-    //3.get by genre
-    @GetMapping(params = "genre")
-    public List<String> getSingersByGenre(@RequestParam String genre) {
-        if (genre == null || genre.trim().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Genre parameter is required");
-        }
-        return singerRepository.findByGenre(genre).stream()
-                .map(Singer::getName)
-                .collect(Collectors.toList());
-    }
+   // 3. Search singers by name substring
+   @GetMapping(params = "name")
+   public List<String> getSingersByName(@RequestParam String name) {
+       if (name == null || name.trim().isEmpty()) {
+           throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name parameter is required");
+       }
+       return singerRepository.findByNameContainingIgnoreCase(name).stream()
+               .map(Singer::getName)
+               .collect(Collectors.toList());
+   }
+
 
     // just hire
     @PostMapping("/{id}/hire")
@@ -115,9 +116,25 @@ public class SingerController {
         schedule.setDate(request.date);
         schedule.setLocation(request.location);
 
-
-
         return scheduleRepository.save(schedule);
+    }
+
+    @GetMapping("/locations")
+    public List<String> getLocationsByName(@RequestParam String name) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name parameter is required");
+        }
+
+        String locationUrl = "http://192.168.0.11:80/locations?name=" + name;
+        try {
+            ResponseEntity<String[]> response = restTemplate.getForEntity(locationUrl, String[].class);
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Failed to fetch locations");
+            }
+            return List.of(response.getBody());
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Error communicating with location service", e);
+        }
     }
 
     // DTO for hire request

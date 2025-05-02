@@ -8,6 +8,7 @@ public class Singer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private int monthlyListener;
 
     private String name;
     private String genre;
@@ -23,9 +24,13 @@ public class Singer {
     // Getters and setters
     public Long getId() { return id; }
 
+    public int getMonthlyListener(){return monthlyListener;}
+
     public String getName() { return name; }
 
     public String getGenre() { return genre; }
+
+    public void setMonthlyListener(int monthlyListener){this.monthlyListener = monthlyListener;}
 
     public void setName(String name) { this.name = name; }
 

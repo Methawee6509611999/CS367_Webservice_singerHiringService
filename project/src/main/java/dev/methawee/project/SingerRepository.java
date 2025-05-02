@@ -5,6 +5,6 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SingerRepository extends JpaRepository<Singer, Long> {
-    List<Singer> findByGenre(String genre);
+    List<Singer> findByNameContainingIgnoreCase(String name);
 }
 

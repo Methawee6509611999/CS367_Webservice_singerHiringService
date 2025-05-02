@@ -19,14 +19,19 @@ public class LoadDatabase {
             // Create and save singers
             Singer adele = new Singer("Adele");
             adele.setGenre("pop");
+            adele.setMonthlyListener(10);
             Singer rihanna = new Singer("Rihanna");
             rihanna.setGenre("rap");
+            rihanna.setMonthlyListener(100);
             Singer bruno = new Singer("Bruno Mars");
+            bruno.setMonthlyListener(9999);
             bruno.setGenre("pop");
             Singer weeknd = new Singer("The Weeknd");
             weeknd.setGenre("pop");
+            weeknd.setMonthlyListener(5000);
             Singer chester = new Singer("Chester Bennington");
             chester.setGenre("rock");
+            chester.setMonthlyListener(999999);
 
             singerRepository.save(adele);
             singerRepository.save(rihanna);
