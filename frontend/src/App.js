@@ -2,33 +2,38 @@ import React, { useEffect, useState } from 'react';
 
 function App() {
   const [singers, setSingers] = useState([]);
+  const [locations, setLocations] = useState([]);
   const [selectedSingerId, setSelectedSingerId] = useState(null);
   const [selectedSingerName, setSelectedSingerName] = useState('');
   const [hireDate, setHireDate] = useState('');
-  const [location, setLocation] = useState('');
+  const [locationIndex, setLocationIndex] = useState('');
 
   useEffect(() => {
     fetch('/singers')
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to fetch singers');
-        return res.json();
-      })
+      .then(res => res.json())
       .then(data => setSingers(data))
-      .catch(err => console.error(err));
+      .catch(err => console.error('Failed to fetch singers:', err));
+
+    fetch('http://192.168.0.11:8080/locations')
+      .then(res => res.json())
+      .then(data => setLocations(data))
+      .catch(err => console.error('Failed to fetch locations:', err));
   }, []);
 
-  const hireSinger = () => {
-    fetch(`/singers/${selectedSingerId}/hire`, {
+  const hireSingerAt = () => {
+    const locationId = parseInt(locationIndex) + 1;
+
+    fetch(`/singers/${selectedSingerId}/hireAt`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ date: hireDate, location })
+      body: JSON.stringify({ date: hireDate, location: locationId }) // send locationId as location
     })
       .then(res => {
         if (!res.ok) throw new Error('Failed to hire');
         alert('Singer hired!');
         setSelectedSingerId(null);
         setHireDate('');
-        setLocation('');
+        setLocationIndex('');
       })
       .catch(err => {
         alert('Hiring failed');
@@ -44,7 +49,7 @@ function App() {
           <li key={index}>
             {name}{' '}
             <button onClick={() => {
-              setSelectedSingerId(index + 1); // assumes IDs = 1-based
+              setSelectedSingerId(index + 1); // assumes singer ID = index + 1
               setSelectedSingerName(name);
             }}>
               Hire
@@ -54,12 +59,19 @@ function App() {
       </ul>
 
       {selectedSingerId && (
-        <div>
+        <div style={{ marginTop: 20 }}>
           <h2>Hire {selectedSingerName}</h2>
           <input type="date" value={hireDate} onChange={e => setHireDate(e.target.value)} />
-          <input type="text" placeholder="Location" value={location} onChange={e => setLocation(e.target.value)} />
-          <button onClick={hireSinger}>Confirm</button>
-          <button onClick={() => setSelectedSingerId(null)}>Cancel</button>
+          <select value={locationIndex} onChange={e => setLocationIndex(e.target.value)}>
+            <option value="">Select location</option>
+            {locations.map((loc, i) => (
+              <option key={i} value={i}>{loc}</option>
+            ))}
+          </select>
+          <div>
+            <button onClick={hireSingerAt}>Confirm</button>
+            <button onClick={() => setSelectedSingerId(null)}>Cancel</button>
+          </div>
         </div>
       )}
     </div>

@@ -18,10 +18,20 @@ public class LoadDatabase {
         return args -> {
             // Create and save singers
             Singer adele = new Singer("Adele");
+            adele.setGenre("pop");
             Singer rihanna = new Singer("Rihanna");
+            rihanna.setGenre("rap");
+            Singer bruno = new Singer("Bruno Mars");
+            bruno.setGenre("pop");
+            Singer weeknd = new Singer("The Weeknd");
+            weeknd.setGenre("pop");
+            Singer chester = new Singer("Chester Bennington");
+            chester.setGenre("rock");
 
             singerRepository.save(adele);
             singerRepository.save(rihanna);
+            singerRepository.save(bruno);
+            singerRepository.save(weeknd);
 
             log.info("Preloaded singer: " + adele);
             log.info("Preloaded singer: " + rihanna);
