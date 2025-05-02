@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import LocationSearch from './LocationSearch';
 
 function App() {
   const [singers, setSingers] = useState([]);
@@ -57,6 +58,9 @@ function App() {
           </li>
         ))}
       </ul>
+      <div>
+      <LocationSearch />
+    </div>
 
       {selectedSingerId && (
         <div style={{ marginTop: 20 }}>

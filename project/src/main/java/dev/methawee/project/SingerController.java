@@ -125,7 +125,7 @@ public class SingerController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name parameter is required");
         }
 
-        String locationUrl = "http://192.168.0.11:80/locations?name=" + name;
+        String locationUrl = "http://192.168.0.11:8080/locations?name=" + name;
         try {
             ResponseEntity<String[]> response = restTemplate.getForEntity(locationUrl, String[].class);
             if (!response.getStatusCode().is2xxSuccessful()) {
